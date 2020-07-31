@@ -1,0 +1,19 @@
+#!/bin/bash
+unlink /usr/bin/iphakethe 2> /dev/null
+ln -s /usr/share/iphakethe/iphakethe.py /usr/bin/iphakethe
+
+if [[ -f /etc/iphakethe/iphakethe.conf ]];then
+    mv /etc/iphakethe/iphakethe.conf /etc/iphakethe/iphakethe.conf-dpkg-new
+fi
+
+if [[ -f /etc/iphakethe/iphakethe.conf.old ]];then
+    mv /etc/iphakethe/iphakethe.conf.old /etc/iphakethe/iphakethe.conf
+fi
+
+if [[ -f /etc/cron.d/iphakethe && -f /etc/cron.d/iphakethe.old ]];then
+    rm /etc/cron.d/iphakethe
+    mv /etc/cron.d/iphakethe.old /etc/cron.d/iphakethe
+fi
+
+a2ensite iphakethe.conf
+a2enmod cgi

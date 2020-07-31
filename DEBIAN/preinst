@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [[ -f /etc/iphakethe/iphakethe.conf ]];then
+
+    mv /etc/iphakethe/iphakethe.conf /etc/iphakethe/iphakethe.conf.old
+
+fi
+
+if [[ -f /etc/cron.d/iphakethe ]];then
+
+    mv /etc/cron.d/iphakethe /etc/cron.d/iphakethe.old
+
+fi
