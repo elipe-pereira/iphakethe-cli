@@ -38,6 +38,7 @@ def main():
 
         git_addr = config.get_git_addr()
         user_git = config.get_user_git()
+        git_port = config.get_git_port()
         repo = config.get_repo()
         folder_package_linux_repo = config.get_folder_package_linux_repo()
         testing = config.get_testing()
@@ -47,7 +48,7 @@ def main():
         keep_old_packages = config.get_keep_old_packages()
 
         check.check_dir_and_create_and_go_to(temp_dir)
-        git = Git(git_addr, user_git, repo)
+        git = Git(git_addr, git_port, user_git, repo)
         git.clone()
 
         if testing == "yes":
