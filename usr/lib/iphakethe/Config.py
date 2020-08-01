@@ -49,7 +49,7 @@ class Config(object):
 		return self._git_addr
 
 
-	def set_git_port(self, git_port):
+	def set_git_port(self, section, git_port):
 		self._git_port = git_port
 
 
