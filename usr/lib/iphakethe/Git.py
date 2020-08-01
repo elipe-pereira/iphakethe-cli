@@ -12,7 +12,7 @@ class Git(object):
 
 
 	def clone(self):
-		if int(self._git_port) == 22:
+		if self._git_port == "22":
 			os.system("git clone {0}:{1}/{2}.git".format(self._git_addr, self._git_user, self._git_repo))
 			
 		else:
