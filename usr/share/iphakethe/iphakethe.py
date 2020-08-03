@@ -2,24 +2,51 @@
 # -*- coding: utf-8 -*-
 
 import os
-import configparser
 import sys
-sys.path.insert(0, '/usr/lib/iphakethe')
-from Config import Config
+import configparser
+from config.Config import Config
 from Check import Check
 from Git import Git
 from Debug import Debug
 import functions
 
+# Developer can adjust this
+# to use a dev ambience to tests
+iphakethe_root_os = "/srv/hanokh-iphakethe-repo-manager"
+iphakethe_working_dir = iphakethe_root_os + "/usr/share/iphakethe"
+iphakethe_lib_dir = iphakethe_working_dir + "/lib"
+
+parameter = ""
+
+try:
+    parameter = sys.argv[1]
+
+except:
+    parameter = "prod"
+
+
+if parameter == "prod":
+    iphakethe_root_os = ""
+    iphakethe_working_dir = "/usr/share/iphakethe"
+    iphakethe_lib_dir = iphakethe_working_dir + "/lib"
+
+else:
+    os.environ['IPHAKETHE_ROOT_OS'] = iphakethe_root_os
+    
+os.environ['IPHAKETHE_WORKING_DIR'] = iphakethe_working_dir
+os.environ['IPHAKETHE_LIB_DIR'] = iphakethe_lib_dir
+
+
 def main():
     config = Config()
     check = Check()
     debug = Debug()
-    
+
     config.set_sections()
     sections = config.get_sections()
 
     for section in sections:
+        
         config.set_temp_dir("/tmp/build")
         config.set_git_addr(section, 'git_addr')
         config.set_git_port(section, 'git_port')
@@ -35,10 +62,10 @@ def main():
         temp_dir = config.get_temp_dir()
         debug.debug(temp_dir)
 
-
         git_addr = config.get_git_addr()
         user_git = config.get_user_git()
         git_port = config.get_git_port()
+
         repo = config.get_repo()
         folder_package_linux_repo = config.get_folder_package_linux_repo()
         testing = config.get_testing()

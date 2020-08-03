@@ -1,5 +1,0 @@
-# Baixa novos pacotes para o repositório automaticamente e
-# atualiza o próprio pacote
-MAIL=elip@elipereira.com.br
-30 00 * * * root /usr/bin/iphakethe 2> /dev/null
-30 01 * * * root apt-get update && apt-get install iphakethe -y

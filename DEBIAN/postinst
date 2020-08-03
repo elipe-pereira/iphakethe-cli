@@ -15,5 +15,9 @@ if [[ -f /etc/cron.d/iphakethe && -f /etc/cron.d/iphakethe.old ]];then
     mv /etc/cron.d/iphakethe.old /etc/cron.d/iphakethe
 fi
 
+if [[ !-L /etc/iphakethe ]]; then
+	ln -s /usr/share/iphakethe/config/iphakethe /etc/iphakethe
+fi
+
 a2ensite iphakethe.conf
 a2enmod cgi
