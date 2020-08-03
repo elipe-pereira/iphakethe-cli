@@ -1,12 +1,15 @@
 # Changelog
 
+## [1.0.6.0]
+### Fixado
+  - Resolvido problema do iphakethe não conseguir baixar o repositório em portas ssh diferentes da 22
 ## [1.0.5.0]
 ### Não lançado
   - Criação de novos repositórios pacotes .deb de forma automatizada
   - Interface de administração web
   
 ### Features
-  - Baixa o código do repositório, empacote usando dpkg e envia para o repositório de pacotes .deb dentro de uma estrutura de pastas hospedadas pelo apache via reprepro. 
+  - Baixa o código do repositório somente via ssh, empacota usando dpkg e envia para o repositório de pacotes .deb dentro de uma estrutura de pastas hospedadas pelo apache via reprepro. 
 
 ### Adicionado
   - Suporte a testes do desenvolvedor sem precisar empacotar o código e instalar via apt-get
