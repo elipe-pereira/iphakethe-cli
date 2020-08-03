@@ -3,6 +3,7 @@
 ## [1.0.6.0]
 ### Fixado
   - Resolvido problema do iphakethe não conseguir baixar o repositório em portas ssh diferentes da 22
+  
 ## [1.0.5.0]
 ### Não lançado
   - Criação de novos repositórios pacotes .deb de forma automatizada
