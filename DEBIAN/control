@@ -1,7 +1,7 @@
 Package: hanokh-iphakethe-repo-manager
 Section: misc
 Priority: optional
-Version: 1.0.5.1
+Version: 1.0.5.2
 Architecture: all
 Maintainer: Eli Florêncio Pereira <elip@elipereira.com.br>
 Depends: git,reprepro, apache2
