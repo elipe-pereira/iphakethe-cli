@@ -6,7 +6,6 @@ import configparser
 
 class Config(object):
 	def __init__(self):
-		self._iphakethe_root_os = os.getenv('IPHAKETHE_ROOT_OS')
 		self._iphakethe_working_dir = os.getenv('IPHAKETHE_WORKING_DIR')
 		self._iphakethe_lib_dir = os.getenv('IPHAKETHE_LIB_DIR')
 		self._config_file = "{0}/config/iphakethe/iphakethe.conf".format(self._iphakethe_working_dir)

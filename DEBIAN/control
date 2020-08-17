@@ -1,8 +1,0 @@
-Package: hanokh-iphakethe-repo-manager
-Section: misc
-Priority: optional
-Version: 1.0.6.0
-Architecture: all
-Maintainer: Eli Florêncio Pereira <elip@elipereira.com.br>
-Depends: git,reprepro, apache2
-Description: Este script que automatiza o empacotamento e envio para o repositório
