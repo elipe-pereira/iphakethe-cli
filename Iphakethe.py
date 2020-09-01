@@ -147,10 +147,8 @@ class Iphakethe(object):
                 os.chdir("{0}/{1}/{2}/{3}".format(temp_dir, package, so_dest_install, package))
                 git.checkout(branch_dev_testing)
 
-            os.chdir("{0}/{1}/{2}/{3}".format(temp_dir, package, so_dest_install, package))
-
             for directory in dirs_to_remove:
-                os.removedirs(directory)
+                os.system("rm -rf {0}/{1}/{2}/{1}/{3}".format(temp_dir, package, so_dest_install, directory))
 
             folder = "{0}/{1}".format(temp_dir, package)
 
