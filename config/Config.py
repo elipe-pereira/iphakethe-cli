@@ -40,6 +40,7 @@ class Config(object):
 		self.__command_pre_rm = " "
 		self.__command_post_rm = " "
 		self.__so_dest_install = " "
+		self.__dirs_to_remove = " "
 
 	def set_sections(self):
 		self.__sections = self.__config.sections()
@@ -196,3 +197,9 @@ class Config(object):
 
 	def get_so_dest_install(self):
 		return self.__so_dest_install
+
+	def set_dirs_to_remove(self, section, dirs_to_remove):
+		self.__dirs_to_remove = self.__config.get(section, dirs_to_remove)
+
+	def get_dirs_to_remove(self):
+		return self.__dirs_to_remove

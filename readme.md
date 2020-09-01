@@ -1,4 +1,7 @@
 # Changelog
+## [2.0.0]
+### Alterado
+  - Alterado iphakethe pra estruturar pacotes no arquivo de configuração em vez do repositório
 
 ## [1.0.6.0]
 ### Fixado

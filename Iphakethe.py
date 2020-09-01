@@ -44,6 +44,7 @@ class Iphakethe(object):
             self.__config.set_command_pre_rm(section, 'command_pre_rm')
             self.__config.set_command_post_rm(section, 'command_post_rm')
             self.__config.set_so_dest_install(section, 'so_dest_install')
+            self.__config.set_dirs_to_remove(section, 'dirs_to_remove')
 
             temp_dir = self.__config.get_temp_dir()
             git_addr = self.__config.get_git_addr()
@@ -69,6 +70,7 @@ class Iphakethe(object):
             command_pre_rm = self.__config.get_command_pre_rm().split(',')
             command_post_rm = self.__config.get_command_post_rm().split(',')
             so_dest_install = self.__config.get_so_dest_install()
+            dirs_to_remove = self.__config.get_dirs_to_remove().split(',')
 
             if self.__dirs.check_dir(temp_dir):
                 os.system("rm -rf {0}".format(temp_dir))
@@ -137,9 +139,18 @@ class Iphakethe(object):
             git = Git(git_addr, git_port, user_git, repo)
             git.clone()
 
+            os.rename(
+                "{0}/{1}/{2}/{3}".format(temp_dir, package, so_dest_install, repo),
+                "{0}/{1}/{2}/{1}".format(temp_dir, package, so_dest_install))
+
             if testing == "yes":
-                os.chdir("{0}/{1}/{2}/{3}".format(temp_dir, package, so_dest_install, repo))
+                os.chdir("{0}/{1}/{2}/{3}".format(temp_dir, package, so_dest_install, package))
                 git.checkout(branch_dev_testing)
+
+            os.chdir("{0}/{1}/{2}/{3}".format(temp_dir, package, so_dest_install, package))
+
+            for directory in dirs_to_remove:
+                os.removedirs(directory)
 
             folder = "{0}/{1}".format(temp_dir, package)
 
