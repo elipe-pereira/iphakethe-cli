@@ -2,24 +2,22 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-from configparser import ConfigParser
 from Iphakethe import Iphakethe
-import time
+
 
 class Main(object):
-    realpath = os.path.realpath(sys.argv[0])
-    iphakethe_working_dir = os.path.dirname(realpath)
-    iphakethe_lib_dir = iphakethe_working_dir + "/lib"
-    
-    os.environ['IPHAKETHE_WORKING_DIR'] = iphakethe_working_dir
-    os.environ['IPHAKETHE_LIB_DIR'] = iphakethe_lib_dir
+    def __init__(self):
+        self.realpath = os.path.realpath(sys.argv[0])
+        self.iphakethe_working_dir = os.path.dirname(self.realpath)
+        self.iphakethe_lib_dir = self.iphakethe_working_dir + "/lib"
 
-    def main():	
+    def main(self):
+        os.environ['IPHAKETHE_WORKING_DIR'] = self.iphakethe_working_dir
+        os.environ['IPHAKETHE_LIB_DIR'] = self.iphakethe_lib_dir
         iphakethe = Iphakethe()
-
-        # iphakethe.pack()
+        iphakethe.pack()
 
 
 if __name__ == '__main__':
-    Main.main()
-	
+    run = Main()
+    run.main()

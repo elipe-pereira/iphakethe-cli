@@ -2,111 +2,170 @@
 # -*- coding: utf-8 -*-
 
 import os
-import sys
-import configparser
 from config.Config import Config
-from lib.Check import Check
+from lib.Dirs import Dirs
 from lib.Git import Git
 from lib.Debug import Debug
-import lib.functions
 
 
 class Iphakethe(object):
-	def __init__(self):
-		self._temp_dir = ""
-		self._git_addr = ""
-		self._git_port = ""
-		self._user_git = ""
-		self._repo = ""
-		self._folder_package_linux_repo = ""
-		self._testing = ""
-		self._branch_dev_testing = ""
-		self._distro_repo = ""
-		self._codename_repo = ""
-		self._keep_old_packages = ""
-		self.config = Config()
-		self.check = Check()
-		self.debug = Debug()
+    def __init__(self):
+        self.__config = Config()
+        self.__dirs = Dirs()
+        self.__debug = Debug()
 
-	def pack(self):
-		config = Config()
-		check = Check()
-		debug = Debug()
+    def pack(self):
+        config = Config()
+        config.set_sections()
+        sections = config.get_sections()
 
-		config.set_sections()
+        for section in sections:
+            self.__config.set_temp_dir("/tmp/build")
+            self.__config.set_git_addr(section, 'git_addr')
+            self.__config.set_git_port(section, 'git_port')
+            self.__config.set_user_git(section, 'user_git')
+            self.__config.set_repo(section, 'repo')
+            self.__config.set_folder_package_linux_repo(section, 'folder_package_linux_repo')
+            self.__config.set_testing(section, 'testing')
+            self.__config.set_branch_dev_testing(section, 'branch_dev_testing')
+            self.__config.set_distro_repo(section, 'distro_repo')
+            self.__config.set_codename_repo(section, 'codename_repo')
+            self.__config.set_keep_old_packages(section, 'keep_old_packages')
+            self.__config.set_package_section(section, 'package_section')
+            self.__config.set_package(section, 'package')
+            self.__config.set_priority(section, 'priority')
+            self.__config.set_version(section, 'version')
+            self.__config.set_architecture(section, 'architecture')
+            self.__config.set_maintainer(section, 'maintainer')
+            self.__config.set_depends(section, 'depends')
+            self.__config.set_description(section, 'description')
+            self.__config.set_command_pre_inst(section, 'command_pre_inst')
+            self.__config.set_command_post_inst(section, 'command_post_inst')
+            self.__config.set_command_pre_rm(section, 'command_pre_rm')
+            self.__config.set_command_post_rm(section, 'command_post_rm')
+            self.__config.set_so_dest_install(section, 'so_dest_install')
 
-		sections = config.get_sections()
+            temp_dir = self.__config.get_temp_dir()
+            git_addr = self.__config.get_git_addr()
+            user_git = self.__config.get_user_git()
+            git_port = self.__config.get_git_port()
+            repo = self.__config.get_repo()
+            folder_package_linux_repo = self.__config.get_folder_package_linux_repo()
+            testing = self.__config.get_testing()
+            branch_dev_testing = self.__config.get_branch_dev_testing()
+            distro_repo = self.__config.get_distro_repo()
+            codename_repo = self.__config.get_codename_repo()
+            keep_old_packages = self.__config.get_keep_old_packages()
+            package_section = self.__config.get_package_section()
+            package = self.__config.get_package()
+            priority = self.__config.get_priority()
+            version = self.__config.get_version()
+            architecture = self.__config.get_architecture()
+            maintainer = self.__config.get_maintainer()
+            depends = self.__config.get_depends()
+            description = self.__config.get_description()
+            command_pre_inst = self.__config.get_command_pre_inst().split(',')
+            command_post_inst = self.__config.get_command_post_inst().split(',')
+            command_pre_rm = self.__config.get_command_pre_rm().split(',')
+            command_post_rm = self.__config.get_command_post_rm().split(',')
+            so_dest_install = self.__config.get_so_dest_install()
 
-		for section in sections:
-			self.config.set_temp_dir("/tmp/build")
-			self.config.set_git_addr(section, 'git_addr')
-			self.config.set_git_port(section, 'git_port')
-			self.config.set_user_git(section, 'user_git')
-			self.config.set_repo(section, 'repo')
-			self.config.set_folder_package_linux_repo(section, 'folder_package_linux_repo')
-			self.config.set_testing(section , 'testing')
-			self.config.set_branch_dev_testing(section, 'branch_dev_testing')
-			self.config.set_distro_repo(section, 'distro_repo')
-			self.config.set_codename_repo(section, 'codename_repo')
-			self.config.set_keep_old_packages(section, 'keep_old_packages')
-			
-			self._temp_dir = self.config.get_temp_dir()
-			self._git_addr = self.config.get_git_addr()
-			self._user_git = self.config.get_user_git()
-			self._git_port = self.config.get_git_port()
-			self._repo = self.config.get_repo()
-			self._folder_package_linux_repo = self.config.get_folder_package_linux_repo()
-			self._testing = self.config.get_testing()
-			self._branch_dev_testing = self.config.get_branch_dev_testing()
-			self._distro_repo = self.config.get_distro_repo()
-			self._codename_repo = self.config.get_codename_repo()
-			self._keep_old_packages = self.config.get_keep_old_packages()
+            if self.__dirs.check_dir(temp_dir):
+                os.system("rm -rf {0}".format(temp_dir))
 
-			self.check.check_dir_and_create_and_go_to(self._temp_dir)
+            self.__dirs.check_dir_and_create_and_go_to(temp_dir)
 
-			git = Git(self._git_addr, self._git_port, self._user_git, self._repo)
-			git.clone()
+            dir_inst = "{0}/{1}/{2}".format(temp_dir, package, so_dest_install)
+            debian_folder = "{0}/{1}/{2}".format(temp_dir, package, "DEBIAN")
+            os.makedirs(dir_inst)
+            os.mkdir(debian_folder)
 
-			if self._testing == "yes":
-				os.chdir("{0}/{1}".format(temp_dir, repo))
-				git.checkout(branch_dev_testing)
+            file_control = open("{0}/{1}".format(debian_folder, 'control'), '+w')
 
-			folder = "{0}/{1}".format(self._temp_dir, self._repo)
+            write_control = "Section: " + package_section + "\n"
+            write_control += "Package: " + package + "\n"
+            write_control += "Priority: " + priority + "\n"
+            write_control += "Version: " + version + "\n"
+            write_control += "Architecture: " + architecture + "\n"
+            write_control += "Maintainer: " + maintainer + "\n"
+            write_control += "Depends: " + depends + "\n"
+            write_control += "Description: " + description + "\n\n"
 
-			self.check.set_permission('0755', folder)
+            file_control.write(write_control)
+            file_control.close()
 
-			package_file_control = open("{0}/{1}/DEBIAN/control".format(self._temp_dir, self._repo))
-			temp_file_package_control = open("{0}/FILE_TEMP_PACKAGE".format(self._temp_dir), "w+")
+            file_command_pre_inst = open("{0}/{1}".format(debian_folder, "preinst"), "+w")
+            file_command_pre_inst.write("#!/bin/bash\n")
 
-			temp_file_package_control.write("[PACKAGE]\n")
-	        
-			for line in package_file_control:
-				temp_file_package_control.write(line)
+            for command in command_pre_inst:
+                file_command_pre_inst.write(command + "\n")
 
-			temp_file_package_control.close()
-			package_file_control.close()
+            file_command_pre_inst.close()
 
-			files_to_delete_package_deb = [".git", "readme.md", "README.md",
-	       	                               "Jenkinsfile", ".gitignore"]
+            os.chmod("{0}/{1}".format(debian_folder, "preinst"), 0o755)
 
-			for file in files_to_delete_package_deb:
-				os.system("rm -rf /tmp/build/{0}/{1}".format(self._repo, file))
+            file_command_post_inst = open("{0}/{1}".format(debian_folder, "postinst"), "+w")
+            file_command_post_inst.write("#!/bin/bash\n")
 
-			os.system("dpkg -b {0}/{1} {0}".format(self._temp_dir, self._repo))
+            for command in command_post_inst:
+                file_command_post_inst.write(command + "\n")
 
-			package = configparser.ConfigParser()
-			package.read("{0}/FILE_TEMP_PACKAGE".format(self._temp_dir))
+            file_command_post_inst.close()
 
-			version = package.get('PACKAGE', 'Version')
-			architecture = package.get('PACKAGE', 'Architecture')
+            os.chmod("{0}/{1}".format(debian_folder, 'postinst'), 0o755)
 
-			if self._keep_old_packages == "yes":
-				os.system("reprepro --keepunreferencedfiles -b {0}/{1} includedeb {2} {3}/{4}_{5}_{6}.deb 2> /dev/null"
-	                      .format(self._folder_package_linux_repo, self._distro_repo, self._codename_repo, self._temp_dir,
-	                              self._repo, version, architecture))
-			else:
-				os.system("reprepro -b {0}/{1} includedeb {2} {3}/{4}_{5}_{6}.deb 2> /dev/null"
-	                      .format(self._folder_package_linux_repo, self._distro_repo, self._codename_repo, self._temp_dir,
-	                              self._repo, version, architecture))
+            file_command_pre_rm = open("{0}/{1}".format(debian_folder, "prerm"), "+w")
+            file_command_pre_rm.write("#!/bin/bash\n")
 
-			os.system('rm -rf /tmp/build')
+            for command in command_pre_rm:
+                file_command_pre_rm.write(command + "\n")
+
+            file_command_pre_rm.close()
+
+            os.chmod("{0}/{1}".format(debian_folder, "prerm"), 0o755)
+
+            file_command_post_rm = open("{0}/{1}".format(debian_folder, "postrm"), "+w")
+            file_command_post_rm.write("#!/bin/bash\n")
+
+            for command in command_post_rm:
+                file_command_post_rm.write(command + "\n")
+
+            file_command_post_rm.close()
+
+            os.chdir("{0}/{1}/{2}".format(temp_dir, package, so_dest_install))
+
+            git = Git(git_addr, git_port, user_git, repo)
+            git.clone()
+
+            if testing == "yes":
+                os.chdir("{0}/{1}/{2}/{3}".format(temp_dir, package, so_dest_install, repo))
+                git.checkout(branch_dev_testing)
+
+            folder = "{0}/{1}".format(temp_dir, package)
+
+            self.__dirs.set_permission('0755', folder)
+
+            os.system("dpkg -b {0} {1}".format(folder, temp_dir))
+
+            if keep_old_packages == "yes":
+                os.system("reprepro --keepunreferencedfiles -b {0}/{1} includedeb {2} {3}/{4}_{5}_{6}.deb".format(
+                        folder_package_linux_repo,
+                        distro_repo,
+                        codename_repo,
+                        temp_dir,
+                        package,
+                        version,
+                        architecture))
+
+            else:
+                os.system("reprepro -b {0}/{1} includedeb {2} {3}/{4}_{5}_{6}.deb".format(
+                    folder_package_linux_repo,
+                    distro_repo,
+                    codename_repo,
+                    temp_dir,
+                    package,
+                    version,
+                    architecture))
+
+            os.system("rm -rf {0}".format(temp_dir))
+
