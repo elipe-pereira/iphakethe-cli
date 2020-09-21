@@ -8,6 +8,7 @@ import configparser
 sys.path.insert(0, "/usr/lib/iphakethe")
 from Debug import Debug
 
+
 class Login(object):
 
 	def __init__(self):
@@ -21,7 +22,6 @@ class Login(object):
 		if "email" in self._form or "password" in self._form:
 			self._username = self._form.getvalue("email")
 			self._password = self._form.getvalue("password")
-
 
 		access_config = configparser.ConfigParser()
 		access_config.read("/etc/iphakethe/access.conf")

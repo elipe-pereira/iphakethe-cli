@@ -4,17 +4,16 @@ import os
 
 
 class Dirs(object):
-	def __init__(self):
-		self._value = " "
-
-	def check_dir(self, directory):
+	@staticmethod
+	def check_dir(directory):
 		if os.path.isdir(directory):
 			return True
 		else:
 			return False
 
-	def check_dir_and_create(self, directory):
-		if not self.check_dir(directory):
+	@staticmethod
+	def check_dir_and_create(directory):
+		if not Dirs.check_dir(directory):
 			os.mkdir(directory, 0o0770)
 			return True
 		else:
@@ -25,8 +24,10 @@ class Dirs(object):
 		os.chdir(directory)
 		return True
 
-	def set_permission(self, permission, folder):
+	@staticmethod
+	def set_permission(permission, folder):
 		os.system("chmod -R {0} {1}".format(permission, folder))
 
-	def create_recursive_dirs(self, path):
+	@staticmethod
+	def create_recursive_dirs(path):
 		os.makedirs(path)

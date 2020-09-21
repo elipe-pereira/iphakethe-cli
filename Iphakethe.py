@@ -77,10 +77,33 @@ class Iphakethe(object):
 
             self.__dirs.check_dir_and_create_and_go_to(temp_dir)
 
-            dir_inst = "{0}/{1}/{2}".format(temp_dir, package, so_dest_install)
-            debian_folder = "{0}/{1}/{2}".format(temp_dir, package, "DEBIAN")
-            os.makedirs(dir_inst)
-            os.mkdir(debian_folder)
+            if so_dest_install == "/":
+                os.chdir("{0}".format(temp_dir))
+
+                git = Git(git_addr, git_port, user_git, repo)
+                git.clone()
+
+                os.rename(
+                    "{0}/{1}".format(temp_dir, repo),
+                    "{0}/{1}".format(temp_dir, package))
+
+                dir_inst = "{0}/{1}".format(temp_dir, package)
+                debian_folder = "{0}/{1}".format(dir_inst, "DEBIAN")
+                os.mkdir(debian_folder)
+            else:
+                dir_inst = "{0}/{1}/{2}".format(temp_dir, package, so_dest_install)
+                debian_folder = "{0}/{1}/{2}".format(temp_dir, package, "DEBIAN")
+                os.makedirs(dir_inst)
+                os.mkdir(debian_folder)
+
+                os.chdir("{0}/{1}/{2}".format(temp_dir, package, so_dest_install))
+
+                git = Git(git_addr, git_port, user_git, repo)
+                git.clone()
+
+                os.rename(
+                    "{0}/{1}/{2}/{3}".format(temp_dir, package, so_dest_install, repo),
+                    "{0}/{1}/{2}/{1}".format(temp_dir, package, so_dest_install))
 
             file_control = open("{0}/{1}".format(debian_folder, 'control'), '+w')
 
@@ -133,15 +156,6 @@ class Iphakethe(object):
                 file_command_post_rm.write(command + "\n")
 
             file_command_post_rm.close()
-
-            os.chdir("{0}/{1}/{2}".format(temp_dir, package, so_dest_install))
-
-            git = Git(git_addr, git_port, user_git, repo)
-            git.clone()
-
-            os.rename(
-                "{0}/{1}/{2}/{3}".format(temp_dir, package, so_dest_install, repo),
-                "{0}/{1}/{2}/{1}".format(temp_dir, package, so_dest_install))
 
             if testing == "yes":
                 os.chdir("{0}/{1}/{2}/{3}".format(temp_dir, package, so_dest_install, package))
