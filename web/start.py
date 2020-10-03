@@ -1,11 +1,8 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import sys
-import time
-sys.path.insert(0, "/usr/lib/iphakethe")
-from Login import Login
-from Page import Page
+from .login import Login
+from .page import Page
 
 html = Page()
 login = Login()
@@ -14,6 +11,7 @@ html.set_content_type("text/html")
 content_type = html.get_content_type()
 
 print(content_type)
+
 
 def start_page():
 	html.set_meta_charset("utf-8")

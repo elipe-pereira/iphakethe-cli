@@ -10,15 +10,12 @@ class Git(object):
 		self._git_user = git_user
 		self._git_repo = git_repo
 
-
 	def clone(self):
 		if self._git_port == "22":
 			os.system("git clone {0}:{1}/{2}.git".format(self._git_addr, self._git_user, self._git_repo))
 			
 		else:
 			os.system("git clone ssh://{0}:{1}/{2}/{3}.git".format(self._git_addr, self._git_port, self._git_user, self._git_repo))
-
-
 
 	def checkout(self, branch):
 		os.system("git checkout {0}".format(branch))
