@@ -13,7 +13,7 @@ class Config(object):
 		self.__config = configparser.ConfigParser()
 		self.__config.read(self.__config_file)
 		self.__temp_dir = "/tmp/build"
-		self.__sections = []  
+		self.__sections = []
 		self.__git_addr = " "
 		self.__git_port = 22
 		self.__user_git = " "
@@ -28,7 +28,7 @@ class Config(object):
 		self.__temp_file_package_control = " "
 		self.__files_to_delete_package_deb = []
 		self.__package_section = " "
-		self.__package = " "
+		self.__package_name = " "
 		self.__priority = " "
 		self.__version = " "
 		self.__architecture = " "
@@ -126,11 +126,11 @@ class Config(object):
 	def get_package_section(self):
 		return self.__package_section
 
-	def set_package(self, section, package):
-		self.__package = self.__config.get(section, package)
+	def set_package_name(self, section, package):
+		self.__package_name = self.__config.get(section, package)
 
-	def get_package(self):
-		return self.__package
+	def get_package_name(self):
+		return self.__package_name
 
 	def set_priority(self, section, priority):
 		self.__priority = self.__config.get(section, priority)

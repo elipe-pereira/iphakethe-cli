@@ -4,8 +4,8 @@
 
 def web(environ):
     title = "Página de Login"
-    reboot_css = ""
-    css = ""
+    reboot_css = "https://static.hanokh.com.br/hanokh/hanokh-reboot.css"
+    css = "https://static.hanokh.com.br/hanokh/hanokh.css"
     grid_css = ""
     script_js = ""
     itens = environ.items()
@@ -22,7 +22,7 @@ def web(environ):
 
         file.close()
 
-        return page.format(title, reboot_css, css, grid_css, img_logo, script_js)
+        return page.format(title, reboot_css, css, img_logo, script_js)
 
     elif path == "/teste":
         return "<meta charset='utf-8'>\nVocê digitou /teste"

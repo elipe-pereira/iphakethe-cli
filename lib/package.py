@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from ..config.config import Config
+import os
 from .dirs import Dirs
 from .git import Git
 from .repo import Repo
-import os
+from config.config import Config
 
 
 class Package(object):
@@ -55,7 +55,7 @@ class Package(object):
         self.__config.set_codename_repo(section, 'codename_repo')
         self.__config.set_keep_old_packages(section, 'keep_old_packages')
         self.__config.set_package_section(section, 'package_section')
-        self.__config.set_package(section, 'package')
+        self.__config.set_package_name(section, 'package_name')
         self.__config.set_priority(section, 'priority')
         self.__config.set_version(section, 'version')
         self.__config.set_architecture(section, 'architecture')
@@ -82,7 +82,7 @@ class Package(object):
         self.__codename_repo = self.__config.get_codename_repo()
         self.__keep_old_packages = self.__config.get_keep_old_packages()
         self.__package_section = self.__config.get_package_section()
-        self.__package_name = self.__config.get_package()
+        self.__package_name = self.__config.get_package_name()
         self.__priority = self.__config.get_priority()
         self.__version = self.__config.get_version()
         self.__architecture = self.__config.get_architecture()
@@ -108,6 +108,8 @@ class Package(object):
         if self.__so_dest_install == "/":
             self.__dirs.change_dir(self.__temp_dir)
 
+            self.__git.clone()
+
             dir_repo = "{0}/{1}".format(self.__temp_dir, self.__repo)
             self.__dir_inst = "{0}/{1}".format(self.__temp_dir, self.__package_name)
 
@@ -124,6 +126,8 @@ class Package(object):
             self.__dirs.create_dir(self.__dir_inst)
             self.__dirs.create_dir(self.__debian_folder)
             self.__dirs.change_dir(self.__dir_inst)
+
+            self.__git.clone()
 
             dir_repo = "{0}/{1}".format(self.__dir_inst, self.__repo)
 
@@ -208,6 +212,7 @@ class Package(object):
 
     def send_to_repo(self):
         repo = Repo()
+
         self.__package_file_name = "{0}/{1}_{2}_{3}.deb".format(
             self.__temp_dir,
             self.__package_name,
@@ -215,5 +220,3 @@ class Package(object):
             self.__architecture)
 
         repo.send_to_repo(self.__package_file_name, self.__keep_old_packages)
-
-

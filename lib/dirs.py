@@ -38,7 +38,7 @@ class Dirs(object):
 
 	def create_dir(self, folder):
 		if not self.check_dir(folder):
-			os.mkdir(folder)
+			os.makedirs(folder)
 			return True
 		else:
 			return False
@@ -51,5 +51,5 @@ class Dirs(object):
 		if not self.check_dir(folder_dest):
 			os.rename(folder_source, folder_dest)
 		else:
-			print("Diretório já existe")
-
+			print("Não é necessário renomear")
+			print("Diretório já possui este nome")
