@@ -2,39 +2,29 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{0}</title>
     <link rel="stylesheet" href="{1}">
     <link rel="stylesheet" href="{2}">
-    <link rel="stylesheet" href="{3}">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
 <body>
-<main>
-    <header>
-        <nav>
-            <img src="{4}" width="100" height="50">
-        </nav>
-    </header>
-    <section>
-            <form  action="/Login" method="POST">
-            <label for="usuario">
-                Usuário
-            </label>
-            <input type="text" name="usuario" id="usuario" placeholder="Endereço de E-mail">
-            <label for="senha">
-                Senha
-            </label>
-            <input type="password" name="senha" id="senha" placeholder="Senha">
-            <input type="submit" value="Entrar">
-        </form>
-    </section>
-    <footer>
-        <p>
-            Hanokh - Todos os direitos reservados
-        </p>
-    </footer>
-    <script src="{5}">
-    </script>
-</main>
+<header>
+    <nav>
+        <img src="{3}" width="100" height="50">
+    </nav>
+</header>
+    <form  class="login" action="/Login" method="POST">
+    <label for="usuario">
+        Usuário
+    </label>
+    <input type="text" name="usuario" id="usuario" placeholder="Endereço de E-mail">
+    <label for="senha">
+        Senha
+    </label>
+    <input type="password" name="senha" id="senha" placeholder="Senha">
+    <input type="submit" value="Entrar">
+</form>
+<script src="{4}">
+</script>
 </body>
 </html>

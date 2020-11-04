@@ -52,4 +52,3 @@ class Dirs(object):
 			os.rename(folder_source, folder_dest)
 		else:
 			print("Diretório já existe")
-

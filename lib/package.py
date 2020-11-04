@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from ..config.config import Config
+import os
 from .dirs import Dirs
 from .git import Git
 from .repo import Repo
-import os
+from config.config import Config
 
 
 class Package(object):
@@ -108,7 +108,10 @@ class Package(object):
         if self.__so_dest_install == "/":
             self.__dirs.change_dir(self.__temp_dir)
 
+            self.__git.clone()
+
             dir_repo = "{0}/{1}".format(self.__temp_dir, self.__repo)
+
             self.__dir_inst = "{0}/{1}".format(self.__temp_dir, self.__package_name)
 
             self.__dirs.rename_dir(dir_repo, self.__dir_inst)
@@ -121,9 +124,11 @@ class Package(object):
             self.__dir_inst = "{0}/{1}/{2}".format(self.__temp_dir, self.__package_name, self.__so_dest_install)
             self.__debian_folder = "{0}/{1}/{2}".format(self.__temp_dir, self.__package_name, "DEBIAN")
 
-            self.__dirs.create_dir(self.__dir_inst)
+            self.__dirs.create_recursive_dirs(self.__dir_inst)
             self.__dirs.create_dir(self.__debian_folder)
             self.__dirs.change_dir(self.__dir_inst)
+
+            self.__git.clone()
 
             dir_repo = "{0}/{1}".format(self.__dir_inst, self.__repo)
 
@@ -208,12 +213,15 @@ class Package(object):
 
     def send_to_repo(self):
         repo = Repo()
-        self.__package_file_name = "{0}/{1}_{2}_{3}.deb".format(
+
+        repo.set_dest_linux_distro_repo(self.__folder_package_linux_repo)
+        repo.set_codename_repo(self.__codename_repo)
+        repo.set_distro_repo(self.__distro_repo)
+
+        self.__package_file_name = "{0}/{1}_{2}_{3}".format(
             self.__temp_dir,
             self.__package_name,
             self.__version,
             self.__architecture)
 
         repo.send_to_repo(self.__package_file_name, self.__keep_old_packages)
-
-

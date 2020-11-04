@@ -16,6 +16,7 @@ class Iphakethe(object):
         package = Package()
         self.__config.set_sections()
         sections = self.__config.get_sections()
+        print(sections)
 
         for section in sections:
             package.set_config(section)
