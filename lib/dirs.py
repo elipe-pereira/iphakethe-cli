@@ -38,7 +38,7 @@ class Dirs(object):
 
 	def create_dir(self, folder):
 		if not self.check_dir(folder):
-			os.mkdir(folder)
+			os.makedirs(folder)
 			return True
 		else:
 			return False
