@@ -121,7 +121,7 @@ class Package(object):
             self.__dirs.create_dir(self.__debian_folder)
 
         else:
-            self.__dir_inst = "{0}/{1}/{2}".format(self.__temp_dir, self.__package_name, self.__so_dest_install)
+            self.__dir_inst = "{0}/{1}{2}".format(self.__temp_dir, self.__package_name, self.__so_dest_install)
             self.__debian_folder = "{0}/{1}/{2}".format(self.__temp_dir, self.__package_name, "DEBIAN")
 
             self.__dirs.create_recursive_dirs(self.__dir_inst)
@@ -202,8 +202,9 @@ class Package(object):
 
     def clean_project(self):
         for directory in self.__dirs_to_remove:
-            directory = "{0}/{1}/{2}".format(self.__dir_inst, self.__package_name, directory)
-            self.__dirs.remove_dir(directory)
+            if directory:
+                directory = "{0}/{1}/{2}".format(self.__dir_inst, self.__package_name, directory)
+                self.__dirs.remove_dir(directory)
 
     def build(self):
         self.__project_root_dir = "{0}/{1}".format(self.__temp_dir, self.__package_name)
