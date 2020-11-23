@@ -19,9 +19,9 @@ class Web(object):
         bootstrap_grid_css = "web/assets/bootstrap/css/bootstrap-grid.min.css"
         bootstrap_script_js = "web/assets/bootstrap/js/bootstrap.min.js"
         itens = self.__environ.items()
-        server = self.__environ['HTTP_HOST']
-        url_reboot = "http://" + server + "/assets/css/reboot"
-        url_css = "http://" + server + "/assets/css"
+        server = self.__environ['HTTP_X_FORWARDED_SERVER']
+        url_reboot = "https://" + server + "/assets/css/reboot"
+        url_css = "https://" + server + "/assets/css"
         message = "Hanokh"
 
         if self.__path == "/":

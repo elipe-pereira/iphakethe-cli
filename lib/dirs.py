@@ -51,4 +51,4 @@ class Dirs(object):
 		if not self.check_dir(folder_dest):
 			os.rename(folder_source, folder_dest)
 		else:
-			print("Diretório já existe")
+			print("O diretório já existe ou possui o mesmo nome")

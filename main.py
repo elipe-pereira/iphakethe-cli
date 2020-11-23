@@ -12,9 +12,14 @@ class Main(object):
         self.iphakethe_lib_dir = self.iphakethe_working_dir + "/lib"
 
     def main(self):
+        command_line_argument = ""
+
+        if sys.argv[1]:
+            command_line_argument = sys.argv[1]
+
         os.environ['IPHAKETHE_WORKING_DIR'] = self.iphakethe_working_dir
         os.environ['IPHAKETHE_LIB_DIR'] = self.iphakethe_lib_dir
-        iphakethe = Iphakethe()
+        iphakethe = Iphakethe(command_line_argument)
         iphakethe.pack()
 
 
