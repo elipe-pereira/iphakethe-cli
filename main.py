@@ -14,8 +14,11 @@ class Main(object):
     def main(self):
         command_line_argument = ""
 
-        if sys.argv[1]:
-            command_line_argument = sys.argv[1]
+        try:
+            if sys.argv[1]:
+                command_line_argument = sys.argv[1]
+        except:
+            print("Execução sem parâmetros de linha de comando")
 
         os.environ['IPHAKETHE_WORKING_DIR'] = self.iphakethe_working_dir
         os.environ['IPHAKETHE_LIB_DIR'] = self.iphakethe_lib_dir

@@ -1,12 +1,19 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 import os
+import cgi
+from urllib.parse import parse_qs
+from web.template import Template
+from web.login import Login
 
 class Web(object):
     def __init__(self, environ):
         self.__response_headers = [('content-type', 'text/html')]
         self.__environ = environ
         self.__path = self.__environ['PATH_INFO']
+        self.__page_file = Template()
+        self.__login = ""
+        self.__authenticated = False
 
     def get_reponse_headers(self):
         return self.__response_headers
@@ -18,23 +25,26 @@ class Web(object):
         bootstrap_css = "web/assets/bootstrap/css/bootstrap.min.css"
         bootstrap_grid_css = "web/assets/bootstrap/css/bootstrap-grid.min.css"
         bootstrap_script_js = "web/assets/bootstrap/js/bootstrap.min.js"
+        hanokh_css = "web/assets/hanokh/style.css"
         itens = self.__environ.items()
-        server = self.__environ['HTTP_X_FORWARDED_SERVER']
-        url_reboot = "https://" + server + "/assets/css/reboot"
-        url_css = "https://" + server + "/assets/css"
-        message = "Hanokh"
+        server = ""
+        url_reboot = ""
+        url_css = ""
+
+        # Ambiente de produção via proxy reverso
+        try:
+            server = self.__environ['HTTP_X_FORWARDED_SERVER']
+            url_reboot = "https://" + server + "/assets/css/reboot"
+            url_css = "https://" + server + "/assets/css"
+        except:
+            # ambiente de desenvolvimento via gunicorn
+            server = self.__environ['HTTP_HOST']
+            url_reboot = "http://" + server + "/assets/css/reboot"
+            url_css = "http://" + server + "/assets/css"
+
 
         if self.__path == "/":
-            file = open('web/templates/login.html', 'r')
-            page = ""
-
-            for html in file.readlines():
-                page = page + html
-
-            file.close()
-
-            page = str(page)
-
+            page = self.__page_file.read_file('web/templates/login.html')
 
             return page.format(title, url_reboot, url_css)
 
@@ -42,52 +52,47 @@ class Web(object):
             return str(itens)
 
         elif self.__path == "/assets/css/reboot":
-            file_reboot = open(bootstrap_reboot_css, 'r')
-            page_reboot = ""
             self.__response_headers = [('content-type', 'text/css')]
+            page = self.__page_file.read_file(bootstrap_reboot_css)
 
-            for line in file_reboot.readlines():
-                page_reboot += line
-
-            # return self.__path
-            return str(page_reboot)
+            return page
 
         elif self.__path == "/assets/css":
-            file_css = open(bootstrap_css, 'r')
-            page_css = ""
+            page = self.__page_file.read_file(bootstrap_css)
             self.__response_headers = [('content-type', 'text/css')]
 
-            for line in file_css.readlines():
-                page_css += line
-
-            return str(page_css)
+            return page
 
         elif self.__path == "/assets/css/bootstrap-reboot.min.css.map":
-            file = open("web/assets/bootstrap/css/bootstrap-reboot.min.css.map", 'r')
-            page_map = ""
+            page = self.__page_file.read_file("web/assets/bootstrap/css/bootstrap-reboot.min.css.map")
             self.__response_headers = [('content-type', 'text/css')]
 
-            for line in file.readlines():
-                page_map += line
-
-            return str(page_map)
+            return page
 
         elif self.__path == "/assets/bootstrap.min.css.map":
-            file = open("web/assets/bootstrap/css/bootstrap.min.css.map", 'r')
-            page_map = ""
+            page = self.__page_file.read_file("web/assets/bootstrap/css/bootstrap.min.css.map")
             self.__response_headers = [('content-type', 'text/css')]
 
-            for line in file.readlines():
-                page_map += line
-
-            return page_map
+            return page
 
         elif self.__path == "/start":
-            file = open('web/templates/start.html')
-            page = ""
-            title = "Página inicial"
+            request_body = self.__environ['wsgi.input'].read()
+            post_values = parse_qs(request_body)
+            username = post_values[b'usuario'][0].decode('utf-8')
+            password = post_values[b'senha'][0].decode('utf-8')
 
-            for line in file.readlines():
-                page += line
+            self.__login = Login(username, password)
+            self.__login = self.__login.check_user()
 
-            return page.format(title, url_reboot, url_css)
+            if self.__login == 0:
+                self.__path = "/start"
+                self.__authenticated = True
+
+            if not self.__authenticated:
+                return "<html><body>Nao autenticado</body></html>"
+
+            else:
+                page = self.__page_file.read_file('web/templates/start.html')
+                title = "Página inicial"
+
+                return page.format(title, url_reboot, url_css)
