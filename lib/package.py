@@ -203,7 +203,11 @@ class Package(object):
     def clean_project(self):
         for directory in self.__dirs_to_remove:
             if directory:
-                directory = "{0}/{1}/{2}".format(self.__dir_inst, self.__package_name, directory)
+                if self.__so_dest_install == "/":
+                    directory = "{0}/{1}".format(self.__dir_inst)
+                else:
+                    directory = "{0}/{1}/{2}".format(self.__dir_inst, self.__package_name, directory)
+
                 self.__dirs.remove_dir(directory)
 
     def build(self):
