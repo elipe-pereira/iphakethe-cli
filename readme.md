@@ -1,4 +1,9 @@
 # Changelog
+# 2.0.1
+### Fixado
+  - Iphakethe não estava apagando pastas usadas no desenvolvimento .git por
+  exemplo. 
+
 ## [2.0.0]
 ### Alterado
   - Alterado iphakethe pra estruturar pacotes no arquivo de configuração em vez
@@ -25,7 +30,7 @@
 
 ### Alterado
   - Alterado a estrutura de arquivos do código pra fica contido tudo dentro da
-  pasta principal do iphakethe, incluindo arquivo de configuração que agora 
+  pasta principal do iphakethe, incluindo arquivo de configuração que agora
   vira um link simbólico em /etc
 
 ## [1.0.4.288]
