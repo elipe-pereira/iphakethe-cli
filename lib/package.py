@@ -204,7 +204,7 @@ class Package(object):
         for directory in self.__dirs_to_remove:
             if directory:
                 if self.__so_dest_install == "/":
-                    directory = "{0}/{1}".format(self.__dir_inst)
+                    directory = "{0}/{1}".format(self.__dir_inst, directory)
                 else:
                     directory = "{0}/{1}/{2}".format(self.__dir_inst, self.__package_name, directory)
 
