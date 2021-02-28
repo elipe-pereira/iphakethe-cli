@@ -1,8 +1,9 @@
 # Changelog
-# 2.0.1
+
+## 2.0.1
 ### Fixado
   - Iphakethe não estava apagando pastas usadas no desenvolvimento .git por
-  exemplo. 
+  exemplo.
 
 ## [2.0.0]
 ### Alterado
