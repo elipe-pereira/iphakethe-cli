@@ -3,6 +3,7 @@
 import os
 import sys
 from iphakethe import Iphakethe
+from lib.debug import Debug
 
 
 class Main(object):
@@ -10,6 +11,7 @@ class Main(object):
         self.realpath = os.path.realpath(sys.argv[0])
         self.iphakethe_working_dir = os.path.dirname(self.realpath)
         self.iphakethe_lib_dir = self.iphakethe_working_dir + "/lib"
+        self.debug = Debug()
 
     def main(self):
         command_line_argument = ""
@@ -18,10 +20,11 @@ class Main(object):
             if sys.argv[1]:
                 command_line_argument = sys.argv[1]
         except:
-            print("Execução sem parâmetros de linha de comando")
+            self.debug.log("Execução sem parâmetros de linha de comando")
 
         os.environ['IPHAKETHE_WORKING_DIR'] = self.iphakethe_working_dir
         os.environ['IPHAKETHE_LIB_DIR'] = self.iphakethe_lib_dir
+        
         iphakethe = Iphakethe(command_line_argument)
         iphakethe.pack()
 
